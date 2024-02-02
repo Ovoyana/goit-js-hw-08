@@ -93,26 +93,23 @@ function createGalleryMarkup(images) {
 
 galleryContainer.addEventListener('click', event => {
   event.preventDefault();
-  if (event.target === event.currentTarget) {
-    return;
-  }
+
   const photo = event.target;
-  const galleryImage = photo.closest('.gallery-image');
-
-  if (galleryImage) {
-    const largeImageUrl = galleryImage.dataset.source;
-
+  if (photo.classList.contains('gallery-image')) {
+    const largeImageUrl = photo.dataset.source;
     currentModal = basicLightbox.create(`
         <img src="${largeImageUrl}" alt="Large image">
       `);
-  }
-  currentModal.show();
-});
 
-document.addEventListener('keyup', ({ code }) => {
-  if (code !== 'Escape') {
-    return;
-  }
+    currentModal.show();
 
-  currentModal.close();
+    document.addEventListener('keyup', handleKeyPress);
+
+    function handleKeyPress(event) {
+      if (event.key === 'Escape') {
+        currentModal.close();
+        document.removeEventListener('keyup', handleKeyPress);
+      }
+    }
+  }
 });
