@@ -70,7 +70,7 @@ const galleryContainer = document.querySelector('.gallery');
 
 galleryContainer.innerHTML = createGalleryMarkup(images);
 
-let modal;
+let currentModal;
 
 function createGalleryMarkup(images) {
   return images
@@ -92,18 +92,48 @@ function createGalleryMarkup(images) {
 }
 console.log(createGalleryMarkup(images));
 
-galleryContainer.addEventListener('click', event => {
-  event.preventDefault();
+    // Додаємо делегування подій для відкриття модального вікна
 
-  const image = event.target;
+    galleryContainer.addEventListener('click', handleGalContClick);
+    
+    function handleGalContClick(event) {
+      event.preventDefault();
+    
+      const { target } = event;
+    
+      if (target.classList.contains('gallery-image') && target.nodeName === 'IMG') {
+        const largeImageSrc = target.dataset.source;
+    
+        // Використовуйте basicLightbox для створення модального вікна
 
-  if (image.classList.contains('gallery-image')) {
-    const largeImageUrl = image.dataset.source;
-    modal = basicLightbox.create(`
-        <img src="${largeImageUrl}" alt="Large image">
-      `);
-    modal.show();
+        currentModal = basicLightbox.create(`
+          <img src="${largeImageSrc}" alt="Large Image">
+        `, {
+          onShow: () => {
+            document.addEventListener('keydown', handleKeyDown);
+          },
+          onClose: () => {
+            document.removeEventListener('keydown', handleKeyDown);
+          }
+        });
+    
+        currentModal.show();
+      }
+    }
+    
+    // Функція для обробки натискання клавіші "Escape"
 
-  }
-  
-});
+    function handleKeyDown(event) {
+      if (event.key === 'Escape') {
+        if (currentModal) {
+          currentModal.close();
+        }
+      }
+    }
+
+
+
+
+     
+      
+
