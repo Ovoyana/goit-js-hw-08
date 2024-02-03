@@ -104,7 +104,7 @@ console.log(createGalleryMarkup(images));
       if (target.classList.contains('gallery-image') && target.nodeName === 'IMG') {
         const largeImageSrc = target.dataset.source;
     
-        // Використовуйте basicLightbox для створення модального вікна
+        // Використовуємо basicLightbox для створення модального вікна
 
         currentModal = basicLightbox.create(`
           <img src="${largeImageSrc}" alt="Large Image">
