@@ -70,7 +70,7 @@ const galleryContainer = document.querySelector('.gallery');
 
 galleryContainer.innerHTML = createGalleryMarkup(images);
 
-let currentModal;
+let modal;
 
 function createGalleryMarkup(images) {
   return images
@@ -90,26 +90,20 @@ function createGalleryMarkup(images) {
     })
     .join('');
 }
+console.log(createGalleryMarkup(images));
 
 galleryContainer.addEventListener('click', event => {
   event.preventDefault();
 
-  const photo = event.target;
-  if (photo.classList.contains('gallery-image')) {
-    const largeImageUrl = photo.dataset.source;
-    currentModal = basicLightbox.create(`
+  const image = event.target;
+
+  if (image.classList.contains('gallery-image')) {
+    const largeImageUrl = image.dataset.source;
+    modal = basicLightbox.create(`
         <img src="${largeImageUrl}" alt="Large image">
       `);
+    modal.show();
 
-    currentModal.show();
-
-    document.addEventListener('keyup', handleKeyPress);
-
-    function handleKeyPress(event) {
-      if (event.key === 'Escape') {
-        currentModal.close();
-        document.removeEventListener('keyup', handleKeyPress);
-      }
-    }
   }
+  
 });
